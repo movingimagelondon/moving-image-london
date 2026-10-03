@@ -58,16 +58,20 @@ async function pullHandover(token, store) {
 }
 
 export default async () => {
-  const store = getStore({ name: "mil", consistency: "strong" });
-  const token = Netlify.env.get("NETLIFY_API_TOKEN");
-  let fresh = null;
-  if (token) {
-    try { fresh = await pullHandover(token, store); } catch (e) { fresh = null; }
+  try {
+    const store = getStore({ name: "mil", consistency: "strong" });
+    const token = Netlify.env.get("NETLIFY_API_TOKEN");
+    let fresh = null, note = "";
+    if (token) {
+      try { fresh = await pullHandover(token, store); } catch (e) { note = String(e && e.message || e); }
+    }
+    if (fresh) return reply(fresh, 200, true);
+    const saved = await store.get("listings");
+    if (saved) return reply(saved, 200, true);
+    return reply({ error: token ? "no published listings yet" : "NETLIFY_API_TOKEN is not set", detail: note }, 404, false);
+  } catch (e) {
+    return reply({ error: "listings function failed", detail: String(e && e.message || e) }, 500, false);
   }
-  if (fresh) return reply(fresh, 200, true);
-  const saved = await store.get("listings");
-  if (saved) return reply(saved, 200, true);
-  return reply({ error: token ? "no published listings yet" : "NETLIFY_API_TOKEN is not set" }, 404, false);
 };
 
 export const config = { path: "/api/listings" };
