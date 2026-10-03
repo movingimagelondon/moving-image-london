@@ -202,6 +202,26 @@
       state.ready = true;
       if (data && data.updated) { var u = parse(data.updated); if (u) document.getElementById("updated").textContent = "listings updated " + dmy(u) + "."; }
       render();
+      addStructuredData(state.listings);
     })
     .catch(function () { state.failed = true; render(); });
+
+  // schema.org events, so search engines can show listings as events
+  function addStructuredData(list) {
+    try {
+      var events = list.filter(function (i) { return i && i.title && statusOf(i); }).map(function (i) {
+        var e = { "@type": kindOf(i) === "screening" ? "ScreeningEvent" : "ExhibitionEvent", name: i.title,
+          startDate: i.start ? i.start + (i.time ? "T" + i.time : "") : undefined, endDate: i.end || undefined,
+          eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode", eventStatus: "https://schema.org/EventScheduled",
+          location: { "@type": "Place", name: i.venue, address: { "@type": "PostalAddress", streetAddress: i.address || undefined, addressLocality: "London", addressCountry: "GB" } },
+          url: safeUrl(i.url) || undefined, description: [i.medium, i.gauge].filter(Boolean).join(" / ") || undefined };
+        if (i.artists) e.performer = { "@type": "PerformingGroup", name: i.artists };
+        if (i.free) e.isAccessibleForFree = true;
+        return e;
+      });
+      var tag = document.createElement("script"); tag.type = "application/ld+json";
+      tag.textContent = JSON.stringify({ "@context": "https://schema.org", "@graph": events });
+      document.head.appendChild(tag);
+    } catch (e) {}
+  }
 })();
