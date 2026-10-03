@@ -4,6 +4,7 @@
 (function () {
   var state = { tab: "exhibitions", when: "all", free: false, listings: [], ready: false, failed: false };
   var DAY = 86400000;
+  var settings = MIL_SETTINGS.clean({});
 
   function today() { var d = new Date(); return new Date(d.getFullYear(), d.getMonth(), d.getDate()); }
   function parse(s) { if (!s) return null; var p = String(s).split("-"); if (p.length !== 3) return null; return new Date(+p[0], +p[1] - 1, +p[2]); }
@@ -31,7 +32,7 @@
     }
     if (s && s > t) return { key: "soon", label: "[opens " + dm(s) + "]" };
     if (left === 0) return { key: "closing", label: "[last day]", closing: true };
-    if (left <= 14) return { key: "closing", label: "[closes in " + left + "d]", closing: true };
+    if (left <= settings.closingDays) return { key: "closing", label: "[closes in " + left + "d]", closing: true };
     return { key: "now", label: "[on now]" };
   }
 
@@ -173,6 +174,8 @@
   var startTab = (location.hash || "").replace("#", "");
   state.tab = FILTERS[startTab] ? startTab : "exhibitions";
   buildFilters(); syncKind(); render();
+  fetch("settings.json", { cache: "no-cache" }).then(function (r) { return r.ok ? r.json() : null; })
+    .then(function (s) { if (s) { settings = MIL_SETTINGS.apply(s); render(); } }).catch(function () {});
   fetch("listings.json", { cache: "no-cache" }).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
     .then(function (data) {
       state.listings = (data && data.listings) || [];

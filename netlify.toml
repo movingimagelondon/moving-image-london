@@ -1,6 +1,17 @@
 [build]
   publish = "."
 
+[[redirects]]
+  from = "/admin"
+  to = "https://claude.ai/artifact/L8TKZiGkr1iU97h2ZGR4nX"
+  status = 302
+  force = true
+
+[[headers]]
+  for = "/settings.json"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
 [[headers]]
   for = "/listings.json"
   [headers.values]

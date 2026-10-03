@@ -113,7 +113,7 @@ footer { margin-top: 72px; color: var(--dim); display: grid; gap: 4px; }
   <div class="hr eq" aria-hidden="true"></div>
   <header>
     <h1>Moving Image London</h1>
-    <p class="dim">artists' film + video in london: exhibitions and screenings</p>
+    <p class="dim" id="tagline">artists' film + video in london: exhibitions and screenings</p>
     <p id="tally" class="dim">loading…</p>
   </header>
   <div class="hr eq" aria-hidden="true"></div>
@@ -174,7 +174,7 @@ footer { margin-top: 72px; color: var(--dim); display: grid; gap: 4px; }
 
   <footer>
     <div class="hr" aria-hidden="true"></div>
-    <span>venue pages checked weekly. confirm dates with the venue before you go.</span>
+    <span id="footnote">venue pages checked weekly. confirm dates with the venue before you go.</span>
     <span>shows drop off the day after they close.</span>
     <span id="updated"></span>
   </footer>
@@ -189,6 +189,7 @@ footer { margin-top: 72px; color: var(--dim); display: grid; gap: 4px; }
   var p = v.play && v.play(); if (p && p.catch) p.catch(function () {});
 })();
 </script>
+<script src="settings.js"></script>
 <script src="app.js"></script>
 </body>
 </html>
