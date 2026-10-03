@@ -8,16 +8,6 @@
   force = true
 
 [[headers]]
-  for = "/settings.json"
-  [headers.values]
-    Cache-Control = "public, max-age=0, must-revalidate"
-
-[[headers]]
   for = "/listings.json"
   [headers.values]
     Cache-Control = "public, max-age=0, must-revalidate"
-
-[[headers]]
-  for = "/bg-quiet.*"
-  [headers.values]
-    Cache-Control = "public, max-age=604800"

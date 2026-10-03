@@ -4,7 +4,7 @@
 (function () {
   var state = { tab: "exhibitions", when: "all", free: false, listings: [], ready: false, failed: false };
   var DAY = 86400000;
-  var settings = MIL_SETTINGS.clean({});
+  var settings = { closingDays: 14 };
 
   function today() { var d = new Date(); return new Date(d.getFullYear(), d.getMonth(), d.getDate()); }
   function parse(s) { if (!s) return null; var p = String(s).split("-"); if (p.length !== 3) return null; return new Date(+p[0], +p[1] - 1, +p[2]); }
@@ -136,33 +136,52 @@
 
   // ---- submission form (Web3Forms) ----
   var form = document.getElementById("form"), msg = document.getElementById("msg");
+  var EVENT_FIELDS = ["f-title", "f-artists", "f-start", "f-end", "f-medium", "fld-free"];
   function syncKind() {
-    var sc = document.getElementById("s-kind").value === "screening";
+    var kind = document.getElementById("s-kind").value, sc = kind === "screening", vn = kind === "venue";
+    EVENT_FIELDS.forEach(function (id) { document.getElementById(id).hidden = vn; });
+    document.getElementById("f-time").hidden = !sc;
+    document.getElementById("venue-hint").hidden = !vn;
+    document.getElementById("add-intro").hidden = vn;
     document.getElementById("l-start").textContent = sc ? "date" : "opens";
     document.getElementById("l-end").textContent = sc ? "until (series)" : "closes";
-    document.getElementById("f-time").hidden = !sc;
+    document.getElementById("l-venue").textContent = vn ? "venue name" : "venue";
+    document.getElementById("l-url").textContent = vn ? "programme page" : "website";
+    document.getElementById("s-url").placeholder = vn ? "https:// the page where they list what's on" : "https://";
     document.getElementById("s-medium").placeholder = sc ? "e.g. 16mm programme, live performance" : "e.g. video installation";
   }
-  document.getElementById("s-kind").addEventListener("change", syncKind);
+  document.getElementById("s-kind").addEventListener("change", function () { syncKind(); say(""); });
   function say(text, cls) { msg.className = "msg" + (cls ? " " + cls : ""); msg.textContent = text; }
   function v(id) { return document.getElementById(id).value.trim(); }
   form.addEventListener("submit", function (ev) {
     ev.preventDefault();
-    var kind = v("s-kind"), start = v("s-start"), end = v("s-end"), url = v("s-url");
-    if (!v("s-title") || !v("s-artists") || !v("s-venue")) return say("needs a title, artist and venue.", "error");
-    if (kind === "screening" && !start) return say("needs the screening date.", "error");
-    if (kind === "exhibition" && !end) return say("needs a closing date.", "error");
-    if (start && end && end < start) return say("end date is before start date.", "error");
-    if (url && !safeUrl(url)) return say("website must start with https://", "error");
+    var kind = v("s-kind"), start = v("s-start"), end = v("s-end"), url = v("s-url"), vn = kind === "venue";
+    if (vn) {
+      if (!v("s-venue") || !url) return say("needs the venue name and the page where they list what's on.", "error");
+    } else {
+      if (!v("s-title") || !v("s-artists") || !v("s-venue")) return say("needs a title, artist and venue.", "error");
+      if (kind === "screening" && !start) return say("needs the screening date.", "error");
+      if (kind === "exhibition" && !end) return say("needs a closing date.", "error");
+      if (start && end && end < start) return say("end date is before start date.", "error");
+    }
+    if (url && !safeUrl(url)) return say("links must start with https://", "error");
     var btn = document.getElementById("submit"); btn.disabled = true; say("sending…");
     var fd = new FormData(form), data = {};
     fd.forEach(function (val, k) { data[k] = val; });
-    data.free = document.getElementById("s-free").checked ? "yes" : "no";
-    if (data.title) data.subject = "moving image london: " + data.title + " (" + (data.venue || "?") + ")";
+    if (vn) {
+      ["title", "artists", "start", "end", "time", "medium", "free"].forEach(function (k) { delete data[k]; });
+      data.subject = "moving image london: venue suggestion: " + data.venue;
+    } else {
+      data.free = document.getElementById("s-free").checked ? "yes" : "no";
+      data.subject = "moving image london: " + data.title + " (" + (data.venue || "?") + ")";
+    }
     if (data.email) data.replyto = data.email;
     fetch("https://api.web3forms.com/submit", { method: "POST", headers: { "Content-Type": "application/json", "Accept": "application/json" }, body: JSON.stringify(data) })
       .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { if (!r.ok || !j.success) { var e = new Error(j.message || ("http " + r.status)); e.status = r.status; throw e; } }); })
-      .then(function () { form.reset(); syncKind(); say("received. it'll be checked before it goes live.", "ok"); })
+      .then(function () {
+        form.reset(); syncKind();
+        say(vn ? "received. we'll take a look and add it to the weekly check." : "received. it'll be checked before it goes live.", "ok");
+      })
       .catch(function (e) {
         if (e && e.status) say("didn't send (error " + e.status + "). try again in a moment.", "error");
         else say("didn't send. check your connection and try again.", "error");
@@ -174,8 +193,6 @@
   var startTab = (location.hash || "").replace("#", "");
   state.tab = FILTERS[startTab] ? startTab : "exhibitions";
   buildFilters(); syncKind(); render();
-  fetch("settings.json", { cache: "no-cache" }).then(function (r) { return r.ok ? r.json() : null; })
-    .then(function (s) { if (s) { settings = MIL_SETTINGS.apply(s); render(); } }).catch(function () {});
   fetch("listings.json", { cache: "no-cache" }).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
     .then(function (data) {
       state.listings = (data && data.listings) || [];

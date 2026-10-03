@@ -7,35 +7,27 @@
 <meta name="description" content="Artists' film and video in London: exhibitions and screenings, checked weekly and added to by the community.">
 <meta property="og:title" content="moving image london">
 <meta property="og:description" content="Artists' film and video in London: exhibitions and screenings.">
-<meta property="og:image" content="/bg-quiet.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap">
 <style>
-:root { color-scheme: light; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+:root { color-scheme: dark; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
 body { margin: 0; }
 [hidden] { display: none !important; }
 </style>
 <style>
-/* Layout: a plain-text listings file (monospace, ASCII rules, bracket toggles) floating over a faint, slow loop of decaying film */
+/* Layout: a plain-text listings file (monospace, ASCII rules, bracket toggles), white on black */
 :root {
-  --paper: #ffffff;
-  --ink: #111111;
-  --dim: #6b6b6b;
-  --link: #0000ee;
-  --alert: #b3261e;
+  --paper: #000000;
+  --ink: #ffffff;
+  --dim: #8c8c8c;
+  --link: #9fb4ff;
+  --alert: #ff8a7a;
   --f: "JetBrains Mono", ui-monospace, Menlo, Consolas, "Courier New", monospace;
-  --film-opacity: 0.2;
+  color-scheme: dark;
 }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) { --paper: #0b0b0b; --ink: #dcdcd6; --dim: #8a8a84; --link: #8fa8ff; --alert: #ff8a7a; --film-opacity: 0.26; color-scheme: dark; }
-}
-:root[data-theme="dark"] { --paper: #0b0b0b; --ink: #dcdcd6; --dim: #8a8a84; --link: #8fa8ff; --alert: #ff8a7a; --film-opacity: 0.26; color-scheme: dark; }
 
 body { background: var(--paper); color: var(--ink); font: 14px/1.75 var(--f); }
-#bg { position: fixed; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; pointer-events: none; opacity: var(--film-opacity); filter: invert(1) grayscale(1); mix-blend-mode: multiply; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) #bg { filter: grayscale(1); mix-blend-mode: screen; } }
-:root[data-theme="dark"] #bg { filter: grayscale(1); mix-blend-mode: screen; }
 .wrap { position: relative; z-index: 1; max-width: 72ch; margin: 0 auto; padding-inline: clamp(24px, 9vw, 120px); padding-block: clamp(48px, 10vh, 112px) 96px; }
 a { color: var(--link); }
 :focus-visible { outline: 1px dashed var(--ink); outline-offset: 2px; }
@@ -108,7 +100,6 @@ footer { margin-top: 72px; color: var(--dim); display: grid; gap: 4px; }
 </style>
 </head>
 <body>
-<video id="bg" src="bg-quiet.mp4" poster="bg-quiet.jpg" muted loop playsinline autoplay preload="auto" aria-hidden="true" tabindex="-1"></video>
 <div class="wrap">
   <div class="hr eq" aria-hidden="true"></div>
   <header>
@@ -135,23 +126,24 @@ footer { margin-top: 72px; color: var(--dim); display: grid; gap: 4px; }
 
   <section id="add">
     <h2>Add a listing</h2>
-    <p class="dim">showing artists' moving image in london, in a gallery or on a screen? add it. entries are checked before they go live.</p>
+    <p class="dim" id="add-intro">showing artists' moving image in london, in a gallery or on a screen? add it. entries are checked before they go live.</p>
     <form id="form" name="submit-listing" method="POST" action="https://api.web3forms.com/submit" novalidate>
       <input type="hidden" name="access_key" value="d7406aca-2871-4c43-8893-7d0426dbb962">
       <input type="hidden" name="subject" value="moving image london: new listing submitted">
       <input type="hidden" name="from_name" value="moving image london">
       <input type="checkbox" name="botcheck" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <p class="dim" id="venue-hint" hidden>know a gallery, cinema or space that shows artists' film and video? tell us where to look and we'll add it to the venues we check each week.</p>
       <div class="field"><label for="s-kind">type</label>
-        <select id="s-kind" name="kind"><option value="exhibition">exhibition</option><option value="screening">screening</option></select>
+        <select id="s-kind" name="kind"><option value="exhibition">exhibition</option><option value="screening">screening</option><option value="venue">a venue to check</option></select>
       </div>
-      <div class="field"><label for="s-title">title</label><input id="s-title" name="title" required maxlength="140"></div>
-      <div class="field"><label for="s-artists">artist(s)</label><input id="s-artists" name="artists" required maxlength="200"></div>
-      <div class="field"><label for="s-venue">venue</label><input id="s-venue" name="venue" required maxlength="120"></div>
+      <div class="field" id="f-title"><label for="s-title">title</label><input id="s-title" name="title" required maxlength="140"></div>
+      <div class="field" id="f-artists"><label for="s-artists">artist(s)</label><input id="s-artists" name="artists" required maxlength="200"></div>
+      <div class="field"><label for="s-venue" id="l-venue">venue</label><input id="s-venue" name="venue" required maxlength="120"></div>
       <div class="field"><label for="s-address">address</label><input id="s-address" name="address" maxlength="160"></div>
-      <div class="field"><label for="s-start" id="l-start">opens</label><input id="s-start" name="start" type="date"></div>
-      <div class="field"><label for="s-end" id="l-end">closes</label><input id="s-end" name="end" type="date"></div>
+      <div class="field" id="f-start"><label for="s-start" id="l-start">opens</label><input id="s-start" name="start" type="date"></div>
+      <div class="field" id="f-end"><label for="s-end" id="l-end">closes</label><input id="s-end" name="end" type="date"></div>
       <div class="field" id="f-time" hidden><label for="s-time">time</label><input id="s-time" name="time" type="time"></div>
-      <div class="field"><label for="s-medium">format</label><input id="s-medium" name="medium" maxlength="80" list="formats" placeholder="e.g. video installation"></div>
+      <div class="field" id="f-medium"><label for="s-medium">format</label><input id="s-medium" name="medium" maxlength="80" list="formats" placeholder="e.g. video installation"></div>
       <datalist id="formats">
         <option value="single-screen film/video"></option>
         <option value="multi-screen installation"></option>
@@ -162,9 +154,9 @@ footer { margin-top: 72px; color: var(--dim); display: grid; gap: 4px; }
         <option value="audiovisual installation"></option>
         <option value="immersive / vr / xr"></option>
       </datalist>
-      <div class="field"><label for="s-url">website</label><input id="s-url" name="url" type="url" maxlength="300" placeholder="https://"></div>
+      <div class="field"><label for="s-url" id="l-url">website</label><input id="s-url" name="url" type="url" maxlength="300" placeholder="https://"></div>
       <div class="field"><label for="s-email">your email</label><input id="s-email" name="email" type="email" maxlength="160" placeholder="optional, only if we have questions"></div>
-      <div class="field"><span></span><label class="check" for="s-free"><input id="s-free" name="free" type="checkbox" value="yes"> free entry</label></div>
+      <div class="field" id="fld-free"><span></span><label class="check" for="s-free"><input id="s-free" name="free" type="checkbox" value="yes"> free entry</label></div>
       <div class="actions">
         <button class="btn" id="submit" type="submit">submit</button>
         <span class="msg" id="msg" role="status"></span>
@@ -179,16 +171,6 @@ footer { margin-top: 72px; color: var(--dim); display: grid; gap: 4px; }
   </footer>
 </div>
 
-<script>
-// Background: an 89s half-speed loop of four quiet passages from "disintegrationline" (2:56, 5:02, 5:38, 8:09), dissolving into one another. Muted; reduced motion shows a still frame.
-(function () {
-  var v = document.getElementById("bg");
-  if (!v) return;
-  if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) { v.removeAttribute("autoplay"); v.pause(); return; }
-  var p = v.play && v.play(); if (p && p.catch) p.catch(function () {});
-})();
-</script>
-<script src="settings.js"></script>
 <script src="app.js"></script>
 </body>
 </html>
