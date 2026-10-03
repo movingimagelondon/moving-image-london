@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>moving image london</title>
+<meta name="description" content="Artists' film and video in London: exhibitions and screenings, checked weekly and added to by the community.">
+<meta property="og:title" content="moving image london">
+<meta property="og:description" content="Artists' film and video in London: exhibitions and screenings.">
+<meta property="og:image" content="/bg-quiet.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap">
+<style>
+:root { color-scheme: light; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+body { margin: 0; }
+[hidden] { display: none !important; }
+</style>
+<style>
+/* Layout: a plain-text listings file (monospace, ASCII rules, bracket toggles) floating over a faint, slow loop of decaying film */
+:root {
+  --paper: #ffffff;
+  --ink: #111111;
+  --dim: #6b6b6b;
+  --link: #0000ee;
+  --alert: #b3261e;
+  --f: "JetBrains Mono", ui-monospace, Menlo, Consolas, "Courier New", monospace;
+  --film-opacity: 0.2;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --paper: #0b0b0b; --ink: #dcdcd6; --dim: #8a8a84; --link: #8fa8ff; --alert: #ff8a7a; --film-opacity: 0.26; color-scheme: dark; }
+}
+:root[data-theme="dark"] { --paper: #0b0b0b; --ink: #dcdcd6; --dim: #8a8a84; --link: #8fa8ff; --alert: #ff8a7a; --film-opacity: 0.26; color-scheme: dark; }
+
+body { background: var(--paper); color: var(--ink); font: 14px/1.75 var(--f); }
+#bg { position: fixed; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; pointer-events: none; opacity: var(--film-opacity); filter: invert(1) grayscale(1); mix-blend-mode: multiply; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) #bg { filter: grayscale(1); mix-blend-mode: screen; } }
+:root[data-theme="dark"] #bg { filter: grayscale(1); mix-blend-mode: screen; }
+.wrap { position: relative; z-index: 1; max-width: 72ch; margin: 0 auto; padding-inline: clamp(24px, 9vw, 120px); padding-block: clamp(48px, 10vh, 112px) 96px; }
+a { color: var(--link); }
+:focus-visible { outline: 1px dashed var(--ink); outline-offset: 2px; }
+p { margin: 0; }
+.dim { color: var(--dim); }
+
+.hr { overflow: hidden; white-space: nowrap; color: var(--dim); user-select: none; line-height: 1.2; }
+.hr::before { content: "--------------------------------------------------------------------------------------------------------------------------------"; }
+.hr.eq::before { content: "================================================================================================================================"; color: var(--ink); }
+
+h1, h2 { font: 700 14px/1.6 var(--f); margin: 0; text-transform: lowercase; letter-spacing: 0.02em; }
+header { display: grid; gap: 4px; padding-block: 20px; }
+
+.tabs { display: flex; flex-wrap: wrap; gap: 4px 28px; padding-block: 14px; }
+.tab { font: inherit; color: var(--dim); background: none; border: 0; padding: 0; cursor: pointer; text-transform: lowercase; }
+.tab::before { content: "  "; white-space: pre; }
+.tab.on { color: var(--ink); font-weight: 700; }
+.tab.on::before { content: "> "; }
+.tab:hover { color: var(--ink); }
+.filters { display: flex; flex-wrap: wrap; gap: 4px 24px; padding-block: 18px; }
+.tog { font: inherit; color: var(--ink); background: none; border: 0; padding: 0; cursor: pointer; white-space: nowrap; }
+.tog::before { content: "[ ] "; color: var(--dim); }
+.tog[aria-pressed="true"]::before { content: "[x] "; color: var(--ink); }
+.tog:hover { text-decoration: underline; }
+
+ol.list { list-style: none; margin: 0; padding: 0; }
+.item { display: grid; gap: 2px; padding-block: 28px; }
+.top { margin-bottom: 6px; }
+.tags { display: flex; gap: 1ch; }
+.item + .item { border-top: 1px dashed var(--dim); }
+.top { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0 12px; font-variant-numeric: tabular-nums; }
+.when { color: var(--dim); }
+.status.closing { color: var(--alert); }
+.title { font-weight: 700; text-transform: uppercase; }
+.venue { margin-top: 6px; }
+.title a { color: var(--ink); text-decoration: none; }
+.title a:hover { text-decoration: underline; }
+.line { padding-left: 2ch; text-indent: -2ch; }
+.line::before { content: "> "; color: var(--dim); }
+.note { color: var(--dim); max-width: 64ch; }
+.empty { padding-block: 16px; color: var(--dim); }
+
+section { display: grid; gap: 12px; margin-top: 72px; }
+form { display: grid; gap: 10px; margin-top: 8px; }
+.field { display: grid; grid-template-columns: 13ch minmax(0, 1fr); gap: 0 1ch; align-items: baseline; }
+.field label { color: var(--dim); }
+input, select, textarea { font: inherit; color: var(--ink); background: transparent; border: 0; border-bottom: 1px dashed var(--dim); border-radius: 0; padding: 2px 0; width: 100%; box-sizing: border-box; min-width: 0; }
+input:focus, select:focus, textarea:focus { outline: none; border-bottom: 1px solid var(--ink); }
+textarea { min-height: 3.2em; resize: vertical; }
+select option { background: var(--paper); color: var(--ink); }
+.check { display: flex; gap: 1ch; align-items: center; }
+.check input { width: auto; accent-color: var(--ink); }
+.actions { display: flex; flex-wrap: wrap; gap: 6px 16px; align-items: baseline; margin-top: 8px; }
+.btn { font: inherit; color: var(--ink); background: none; border: 0; padding: 0; cursor: pointer; }
+.btn::before { content: "[ "; color: var(--dim); }
+.btn::after { content: " ]"; color: var(--dim); }
+.btn:hover { text-decoration: underline; }
+.btn:disabled { color: var(--dim); cursor: default; text-decoration: none; }
+.msg.error { color: var(--alert); }
+.hp { position: absolute; left: -9999px; }
+.ok { color: var(--ink); }
+pre.out { font: inherit; white-space: pre-wrap; margin: 4px 0 0; padding: 8px 0 8px 2ch; border-left: 1px solid var(--dim); }
+
+
+footer { margin-top: 72px; color: var(--dim); display: grid; gap: 4px; }
+
+@media (max-width: 480px) {
+  .field { grid-template-columns: minmax(0, 1fr); }
+}
+</style>
+</head>
+<body>
+<video id="bg" src="bg-quiet.mp4" poster="bg-quiet.jpg" muted loop playsinline autoplay preload="auto" aria-hidden="true" tabindex="-1"></video>
+<div class="wrap">
+  <div class="hr eq" aria-hidden="true"></div>
+  <header>
+    <h1>Moving Image London</h1>
+    <p class="dim">artists' film + video in london: exhibitions and screenings</p>
+    <p id="tally" class="dim">loading…</p>
+  </header>
+  <div class="hr eq" aria-hidden="true"></div>
+
+  <div class="tabs" id="tabs" role="tablist" aria-label="Listings">
+    <button class="tab on" id="t-ex" type="button" role="tab" data-tab="exhibitions" aria-selected="true">exhibitions<span class="dim" id="count-ex"></span></button>
+    <button class="tab" id="t-sc" type="button" role="tab" data-tab="screenings" aria-selected="false">screenings<span class="dim" id="count-sc"></span></button>
+  </div>
+  <div class="hr" aria-hidden="true"></div>
+  <div class="filters" role="toolbar" aria-label="Filter listings">
+    <span id="f-when" style="display:contents"></span>
+    <button class="tog" id="f-free" type="button" aria-pressed="false">free</button>
+  </div>
+  <div class="hr" aria-hidden="true"></div>
+
+  <ol class="list" id="list" aria-live="polite"><li class="empty">loading listings…</li></ol>
+  <noscript><p class="empty">this listing needs javascript. the raw list is at <a href="listings.json">listings.json</a>.</p></noscript>
+  <div class="hr" aria-hidden="true"></div>
+
+  <section id="add">
+    <h2>Add a listing</h2>
+    <p class="dim">showing artists' moving image in london, in a gallery or on a screen? add it. entries are checked before they go live.</p>
+    <form id="form" name="submit-listing" method="POST" action="/" data-netlify="true" netlify-honeypot="website-confirm" novalidate>
+      <input type="hidden" name="form-name" value="submit-listing">
+      <p class="hp"><label>leave empty <input name="website-confirm" tabindex="-1" autocomplete="off"></label></p>
+      <div class="field"><label for="s-kind">type</label>
+        <select id="s-kind" name="kind"><option value="exhibition">exhibition</option><option value="screening">screening</option></select>
+      </div>
+      <div class="field"><label for="s-title">title</label><input id="s-title" name="title" required maxlength="140"></div>
+      <div class="field"><label for="s-artists">artist(s)</label><input id="s-artists" name="artists" required maxlength="200"></div>
+      <div class="field"><label for="s-venue">venue</label><input id="s-venue" name="venue" required maxlength="120"></div>
+      <div class="field"><label for="s-address">address</label><input id="s-address" name="address" maxlength="160"></div>
+      <div class="field"><label for="s-start" id="l-start">opens</label><input id="s-start" name="start" type="date"></div>
+      <div class="field"><label for="s-end" id="l-end">closes</label><input id="s-end" name="end" type="date"></div>
+      <div class="field" id="f-time" hidden><label for="s-time">time</label><input id="s-time" name="time" type="time"></div>
+      <div class="field"><label for="s-medium">format</label><input id="s-medium" name="medium" maxlength="80" list="formats" placeholder="e.g. video installation"></div>
+      <datalist id="formats">
+        <option value="single-screen film/video"></option>
+        <option value="multi-screen installation"></option>
+        <option value="screening programme"></option>
+        <option value="16mm programme"></option>
+        <option value="live film performance"></option>
+        <option value="installation with video"></option>
+        <option value="audiovisual installation"></option>
+        <option value="immersive / vr / xr"></option>
+      </datalist>
+      <div class="field"><label for="s-url">website</label><input id="s-url" name="url" type="url" maxlength="300" placeholder="https://"></div>
+      <div class="field"><label for="s-email">your email</label><input id="s-email" name="email" type="email" maxlength="160" placeholder="optional, only if we have questions"></div>
+      <div class="field"><span></span><label class="check" for="s-free"><input id="s-free" name="free" type="checkbox" value="yes"> free entry</label></div>
+      <div class="actions">
+        <button class="btn" id="submit" type="submit">submit</button>
+        <span class="msg" id="msg" role="status"></span>
+      </div>
+    </form>
+  </section>
+
+  <footer>
+    <div class="hr" aria-hidden="true"></div>
+    <span>venue pages checked weekly. confirm dates with the venue before you go.</span>
+    <span>shows drop off the day after they close.</span>
+    <span id="updated"></span>
+  </footer>
+</div>
+
+<script>
+// Background: an 89s half-speed loop of four quiet passages from "disintegrationline" (2:56, 5:02, 5:38, 8:09), dissolving into one another. Muted; reduced motion shows a still frame.
+(function () {
+  var v = document.getElementById("bg");
+  if (!v) return;
+  if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) { v.removeAttribute("autoplay"); v.pause(); return; }
+  var p = v.play && v.play(); if (p && p.catch) p.catch(function () {});
+})();
+</script>
+<script src="app.js"></script>
+</body>
+</html>
