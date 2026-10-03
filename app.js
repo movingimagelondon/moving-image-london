@@ -88,7 +88,7 @@
     if (item.artists) li.appendChild(el("p", null, item.artists));
     li.appendChild(el("p", "venue", item.venue));
     if (item.address) li.appendChild(el("p", "dim", item.address));
-    if (item.medium) li.appendChild(el("p", "line", item.medium));
+    if (item.medium || item.gauge) li.appendChild(el("p", "line", [item.medium, item.gauge].filter(Boolean).join(" / ")));
     var href = safeUrl(item.url);
     if (href) { var p = el("p", "line"); var l = el("a", null, host(href)); l.href = href; l.target = "_blank"; l.rel = "noopener"; p.appendChild(l); li.appendChild(p); }
     return li;
@@ -136,7 +136,7 @@
 
   // ---- submission form (Web3Forms) ----
   var form = document.getElementById("form"), msg = document.getElementById("msg");
-  var EVENT_FIELDS = ["f-title", "f-artists", "f-start", "f-end", "f-medium", "fld-free"];
+  var EVENT_FIELDS = ["f-title", "f-artists", "f-start", "f-end", "f-medium", "f-gauge", "fld-free"];
   function syncKind() {
     var kind = document.getElementById("s-kind").value, sc = kind === "screening", vn = kind === "venue";
     EVENT_FIELDS.forEach(function (id) { document.getElementById(id).hidden = vn; });
@@ -148,7 +148,6 @@
     document.getElementById("l-venue").textContent = vn ? "venue name" : "venue";
     document.getElementById("l-url").textContent = vn ? "programme page" : "website";
     document.getElementById("s-url").placeholder = vn ? "https:// the page where they list what's on" : "https://";
-    document.getElementById("s-medium").placeholder = sc ? "e.g. 16mm programme, live performance" : "e.g. video installation";
   }
   document.getElementById("s-kind").addEventListener("change", function () { syncKind(); say(""); });
   function say(text, cls) { msg.className = "msg" + (cls ? " " + cls : ""); msg.textContent = text; }
@@ -163,13 +162,14 @@
       if (kind === "screening" && !start) return say("needs the screening date.", "error");
       if (kind === "exhibition" && !end) return say("needs a closing date.", "error");
       if (start && end && end < start) return say("end date is before start date.", "error");
+      if (!v("s-medium")) return say("choose a format.", "error");
     }
     if (url && !safeUrl(url)) return say("links must start with https://", "error");
     var btn = document.getElementById("submit"); btn.disabled = true; say("sending…");
     var fd = new FormData(form), data = {};
     fd.forEach(function (val, k) { data[k] = val; });
     if (vn) {
-      ["title", "artists", "start", "end", "time", "medium", "free"].forEach(function (k) { delete data[k]; });
+      ["title", "artists", "start", "end", "time", "medium", "gauge", "free"].forEach(function (k) { delete data[k]; });
       data.subject = "moving image london: venue suggestion: " + data.venue;
     } else {
       data.free = document.getElementById("s-free").checked ? "yes" : "no";

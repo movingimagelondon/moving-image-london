@@ -143,17 +143,8 @@ footer { margin-top: 72px; color: var(--dim); display: grid; gap: 4px; }
       <div class="field" id="f-start"><label for="s-start" id="l-start">opens</label><input id="s-start" name="start" type="date"></div>
       <div class="field" id="f-end"><label for="s-end" id="l-end">closes</label><input id="s-end" name="end" type="date"></div>
       <div class="field" id="f-time" hidden><label for="s-time">time</label><input id="s-time" name="time" type="time"></div>
-      <div class="field" id="f-medium"><label for="s-medium">format</label><input id="s-medium" name="medium" maxlength="80" list="formats" placeholder="e.g. video installation"></div>
-      <datalist id="formats">
-        <option value="single-screen film/video"></option>
-        <option value="multi-screen installation"></option>
-        <option value="screening programme"></option>
-        <option value="16mm programme"></option>
-        <option value="live film performance"></option>
-        <option value="installation with video"></option>
-        <option value="audiovisual installation"></option>
-        <option value="immersive / vr / xr"></option>
-      </datalist>
+      <div class="field" id="f-medium"><label for="s-medium">format</label><select id="s-medium" name="medium" required><option value="">choose…</option><option value="screening">screening</option><option value="installation">installation</option><option value="exhibition w/ video">exhibition w/ video</option><option value="expanded">expanded</option><option value="festival">festival</option></select></div>
+      <div class="field" id="f-gauge"><label for="s-gauge">film / video</label><select id="s-gauge" name="gauge"><option value="">not sure</option><option value="8mm">8mm</option><option value="16mm">16mm</option><option value="35mm">35mm</option><option value="digital">digital</option><option value="video">video</option><option value="other">other</option></select></div>
       <div class="field"><label for="s-url" id="l-url">website</label><input id="s-url" name="url" type="url" maxlength="300" placeholder="https://"></div>
       <div class="field"><label for="s-email">your email</label><input id="s-email" name="email" type="email" maxlength="160" placeholder="optional, only if we have questions"></div>
       <div class="field" id="fld-free"><span></span><label class="check" for="s-free"><input id="s-free" name="free" type="checkbox" value="yes"> free entry</label></div>

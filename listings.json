@@ -11,7 +11,8 @@
    "start": "2026-10-14",
    "end": "2026-12-20",
    "time": "",
-   "medium": "audiovisual installation",
+   "medium": "installation",
+   "gauge": "digital",
    "url": "https://www.180studios.com/",
    "free": false
   },
@@ -25,7 +26,8 @@
    "start": "2026-09-18",
    "end": "2027-01-17",
    "time": "",
-   "medium": "video + sculptural installation",
+   "medium": "exhibition w/ video",
+   "gauge": "",
    "url": "https://www.arebyte.com/slipstream",
    "free": false
   },
@@ -39,7 +41,8 @@
    "start": "2026-10-07",
    "end": "2026-10-18",
    "time": "",
-   "medium": "festival strand / 8 programmes + live film performance",
+   "medium": "festival",
+   "gauge": "",
    "url": "https://whatson.bfi.org.uk/lff/Online/default.asp?BOparam%3A%3AWScontent%3A%3AloadArticle%3A%3Apermalink=experimenta",
    "free": false
   },
@@ -53,7 +56,8 @@
    "start": "2026-10-07",
    "end": "2026-10-18",
    "time": "",
-   "medium": "immersive / vr / xr",
+   "medium": "expanded",
+   "gauge": "digital",
    "url": "https://whatson.bfi.org.uk/lff/Online/default.asp?BOparam%3A%3AWScontent%3A%3AloadArticle%3A%3Apermalink=expanded",
    "free": false
   },
@@ -67,8 +71,9 @@
    "start": "2026-10-18",
    "end": "2026-10-18",
    "time": "14:30",
-   "medium": "16mm",
-   "url": "https://www.cinemamuseum.org.uk/",
+   "medium": "screening",
+   "gauge": "16mm",
+   "url": "https://cinemamuseum.org.uk/scheduled/the-hart-of-london-1970-on-16mm/",
    "free": false
   },
   {
@@ -81,7 +86,8 @@
    "start": "2026-10-08",
    "end": "2027-01-17",
    "time": "",
-   "medium": "video installation",
+   "medium": "installation",
+   "gauge": "",
    "url": "https://ibraaz.org/",
    "free": true
   },
@@ -95,8 +101,9 @@
    "start": "2026-10-12",
    "end": "2026-10-18",
    "time": "",
-   "medium": "screening programme",
-   "url": "https://www.ica.art/exhibitions",
+   "medium": "screening",
+   "gauge": "",
+   "url": "https://www.ica.art/exhibitions/frieze-x-ica-artists-film-programme-2026",
    "free": false
   },
   {
@@ -109,8 +116,9 @@
    "start": "2026-11-07",
    "end": "2026-11-07",
    "time": "",
-   "medium": "video programme, 1984–1997",
-   "url": "https://www.ica.art/films",
+   "medium": "screening",
+   "gauge": "video",
+   "url": "https://www.ica.art/films/marina-grzinic-aina-smid-films-1984-1997",
    "free": false
   },
   {
@@ -123,7 +131,8 @@
    "start": "2026-10-09",
    "end": "2026-12-12",
    "time": "",
-   "medium": "video",
+   "medium": "installation",
+   "gauge": "video",
    "url": "https://lux.org.uk/whats-on/",
    "free": true
   },
@@ -137,7 +146,8 @@
    "start": "2026-09-23",
    "end": "2027-01-31",
    "time": "",
-   "medium": "multi-screen film installation",
+   "medium": "installation",
+   "gauge": "",
    "url": "https://www.serpentinegalleries.org/whats-on/",
    "free": true
   },
@@ -151,7 +161,8 @@
    "start": "2026-09-25",
    "end": "2026-12-19",
    "time": "",
-   "medium": "exhibition",
+   "medium": "exhibition w/ video",
+   "gauge": "",
    "url": "https://www.theshowroom.org/",
    "free": false
   },
@@ -165,7 +176,8 @@
    "start": "2026-07-14",
    "end": "2027-01-17",
    "time": "",
-   "medium": "retrospective incl. film",
+   "medium": "exhibition w/ video",
+   "gauge": "",
    "url": "https://www.tate.org.uk/whats-on/tate-modern",
    "free": false
   },
@@ -179,7 +191,8 @@
    "start": "2026-10-07",
    "end": "2027-02-14",
    "time": "",
-   "medium": "installation with video",
+   "medium": "exhibition w/ video",
+   "gauge": "",
    "url": "https://www.whitechapelgallery.org/exhibitions/",
    "free": false
   },
@@ -193,7 +206,8 @@
    "start": "2026-11-17",
    "end": "2026-12-13",
    "time": "",
-   "medium": "award exhibition / film + video",
+   "medium": "installation",
+   "gauge": "",
    "url": "https://www.whitechapelgallery.org/exhibitions/",
    "free": false
   },
@@ -207,7 +221,8 @@
    "start": "2026-10-07",
    "end": "2027-01-13",
    "time": "",
-   "medium": "screening programme / 4 films / 64 min",
+   "medium": "screening",
+   "gauge": "",
    "url": "https://www.whitechapelgallery.org/exhibitions/screen-portraits-whitechapel-gallery-artists-part-2/",
    "free": true
   }

@@ -13,7 +13,7 @@ Prints JSON: {"changed": bool, "meta": "<gen>:<n>", "chunks": {"MIL_LISTINGS_0":
 import base64, datetime, glob, gzip, hashlib, json, os, re, sys
 
 CHUNK = 3500
-FIELDS = ["title", "artists", "venue", "address", "start", "end", "time", "medium", "url"]
+FIELDS = ["title", "artists", "venue", "address", "start", "end", "time", "medium", "gauge", "url"]
 
 
 def london_today():
