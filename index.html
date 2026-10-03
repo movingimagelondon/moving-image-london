@@ -136,9 +136,11 @@ footer { margin-top: 72px; color: var(--dim); display: grid; gap: 4px; }
   <section id="add">
     <h2>Add a listing</h2>
     <p class="dim">showing artists' moving image in london, in a gallery or on a screen? add it. entries are checked before they go live.</p>
-    <form id="form" name="submit-listing" method="POST" action="/" data-netlify="true" netlify-honeypot="website-confirm" novalidate>
-      <input type="hidden" name="form-name" value="submit-listing">
-      <p class="hp"><label>leave empty <input name="website-confirm" tabindex="-1" autocomplete="off"></label></p>
+    <form id="form" name="submit-listing" method="POST" action="https://api.web3forms.com/submit" novalidate>
+      <input type="hidden" name="access_key" value="d7406aca-2871-4c43-8893-7d0426dbb962">
+      <input type="hidden" name="subject" value="moving image london: new listing submitted">
+      <input type="hidden" name="from_name" value="moving image london">
+      <input type="checkbox" name="botcheck" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
       <div class="field"><label for="s-kind">type</label>
         <select id="s-kind" name="kind"><option value="exhibition">exhibition</option><option value="screening">screening</option></select>
       </div>

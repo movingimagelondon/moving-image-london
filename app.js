@@ -1,6 +1,6 @@
 // moving image london: public listings.
 // Reads listings.json (exported from the editor page) and renders the exhibitions and screenings tabs.
-// The submission form posts to Netlify Forms; entries are emailed to the editor for review.
+// The submission form posts to Web3Forms, which emails each entry to the editor for review.
 (function () {
   var state = { tab: "exhibitions", when: "all", free: false, listings: [], ready: false, failed: false };
   var DAY = 86400000;
@@ -133,7 +133,7 @@
     shown.forEach(function (i) { list.appendChild(row(i)); });
   }
 
-  // ---- submission form (Netlify Forms) ----
+  // ---- submission form (Web3Forms) ----
   var form = document.getElementById("form"), msg = document.getElementById("msg");
   function syncKind() {
     var sc = document.getElementById("s-kind").value === "screening";
@@ -154,12 +154,16 @@
     if (start && end && end < start) return say("end date is before start date.", "error");
     if (url && !safeUrl(url)) return say("website must start with https://", "error");
     var btn = document.getElementById("submit"); btn.disabled = true; say("sending…");
-    var body = new URLSearchParams(new FormData(form)).toString();
-    fetch("/", { method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: body })
-      .then(function (r) { if (!r.ok) { var e = new Error("http " + r.status); e.status = r.status; throw e; } form.reset(); syncKind(); say("received. it'll be checked before it goes live.", "ok"); })
+    var fd = new FormData(form), data = {};
+    fd.forEach(function (val, k) { data[k] = val; });
+    data.free = document.getElementById("s-free").checked ? "yes" : "no";
+    if (data.title) data.subject = "moving image london: " + data.title + " (" + (data.venue || "?") + ")";
+    if (data.email) data.replyto = data.email;
+    fetch("https://api.web3forms.com/submit", { method: "POST", headers: { "Content-Type": "application/json", "Accept": "application/json" }, body: JSON.stringify(data) })
+      .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { if (!r.ok || !j.success) { var e = new Error(j.message || ("http " + r.status)); e.status = r.status; throw e; } }); })
+      .then(function () { form.reset(); syncKind(); say("received. it'll be checked before it goes live.", "ok"); })
       .catch(function (e) {
-        if (e && e.status === 404) say("the submission form isn't switched on yet. please try again later.", "error");
-        else if (e && e.status) say("didn't send (error " + e.status + "). try again in a moment.", "error");
+        if (e && e.status) say("didn't send (error " + e.status + "). try again in a moment.", "error");
         else say("didn't send. check your connection and try again.", "error");
       })
       .finally(function () { btn.disabled = false; });
