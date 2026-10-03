@@ -193,7 +193,10 @@
   var startTab = (location.hash || "").replace("#", "");
   state.tab = FILTERS[startTab] ? startTab : "exhibitions";
   buildFilters(); syncKind(); render();
-  fetch("listings.json", { cache: "no-cache" }).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+  function getJson(u) { return fetch(u, { cache: "no-cache" }).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }); }
+  // live listings from the publish function; listings.json in the repo is the fallback
+  getJson("/api/listings").then(function (d) { if (!d || !Array.isArray(d.listings)) throw new Error("shape"); return d; })
+    .catch(function () { return getJson("listings.json"); })
     .then(function (data) {
       state.listings = (data && data.listings) || [];
       state.ready = true;

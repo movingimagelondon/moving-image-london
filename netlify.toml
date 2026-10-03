@@ -1,6 +1,9 @@
 [build]
   publish = "."
 
+[functions]
+  directory = "netlify/functions"
+
 [[redirects]]
   from = "/admin"
   to = "https://claude.ai/artifact/L8TKZiGkr1iU97h2ZGR4nX"
