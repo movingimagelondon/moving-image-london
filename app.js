@@ -156,8 +156,12 @@
     var btn = document.getElementById("submit"); btn.disabled = true; say("sending…");
     var body = new URLSearchParams(new FormData(form)).toString();
     fetch("/", { method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: body })
-      .then(function (r) { if (!r.ok) throw new Error(r.status); form.reset(); syncKind(); say("received. it'll be checked before it goes live.", "ok"); })
-      .catch(function () { say("didn't send. try again in a moment.", "error"); })
+      .then(function (r) { if (!r.ok) { var e = new Error("http " + r.status); e.status = r.status; throw e; } form.reset(); syncKind(); say("received. it'll be checked before it goes live.", "ok"); })
+      .catch(function (e) {
+        if (e && e.status === 404) say("the submission form isn't switched on yet. please try again later.", "error");
+        else if (e && e.status) say("didn't send (error " + e.status + "). try again in a moment.", "error");
+        else say("didn't send. check your connection and try again.", "error");
+      })
       .finally(function () { btn.disabled = false; });
   });
 
